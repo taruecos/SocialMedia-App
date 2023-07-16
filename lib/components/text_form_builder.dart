@@ -57,12 +57,10 @@ class _TextFormBuilderState extends State<TextFormBuilder> {
             child: Container(
               child: Theme(
                 data: ThemeData(
-                  primaryColor: Theme.of(context).colorScheme.secondary,
-                  colorScheme: ColorScheme.fromSwatch().copyWith(
-                      secondary: Theme.of(context).colorScheme.secondary),
+                  primaryColor: Color.fromARGB(255, 0, 0, 0),
                 ),
                 child: TextFormField(
-                  cursorColor: Theme.of(context).colorScheme.secondary,
+                  cursorColor: Color.fromARGB(255, 0, 0, 0),
                   textCapitalization: TextCapitalization.none,
                   initialValue: widget.initialValue,
                   enabled: widget.enabled,
@@ -98,12 +96,12 @@ class _TextFormBuilderState extends State<TextFormBuilder> {
                     prefixIcon: Icon(
                       widget.prefix,
                       size: 15.0,
-                      color: Theme.of(context).colorScheme.secondary,
+                      color: Color.fromARGB(255, 0, 0, 0),
                     ),
                     suffixIcon: Icon(
                       widget.suffix,
                       size: 15.0,
-                      color: Theme.of(context).colorScheme.secondary,
+                      color: Color.fromARGB(255, 0, 0, 0),
                     ),
                     // fillColor: Colors.white,
                     filled: true,
@@ -158,7 +156,7 @@ class _TextFormBuilderState extends State<TextFormBuilder> {
         Radius.circular(30.0),
       ),
       borderSide: BorderSide(
-        color: Theme.of(context).colorScheme.secondary,
+        color: Color.fromARGB(255, 0, 0, 0),
         width: 1.0,
       ),
     );

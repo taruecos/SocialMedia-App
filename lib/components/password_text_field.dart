@@ -59,12 +59,10 @@ class _PasswordFormBuilderState extends State<PasswordFormBuilder> {
             child: Container(
               child: Theme(
                 data: ThemeData(
-                  primaryColor: Theme.of(context).colorScheme.secondary,
-                  colorScheme: ColorScheme.fromSwatch().copyWith(
-                      secondary: Theme.of(context).colorScheme.secondary),
+                  primaryColor: Color.fromARGB(255, 0, 0, 0),
                 ),
                 child: TextFormField(
-                  cursorColor: Theme.of(context).colorScheme.secondary,
+                  cursorColor: Color.fromARGB(255, 0, 0, 0),
                   initialValue: widget.initialValue,
                   enabled: widget.enabled,
                   onChanged: (val) {
@@ -100,7 +98,7 @@ class _PasswordFormBuilderState extends State<PasswordFormBuilder> {
                     prefixIcon: Icon(
                       widget.prefix,
                       size: 15.0,
-                      color: Theme.of(context).colorScheme.secondary,
+                      color: Color.fromARGB(255, 0, 0, 0),
                     ),
                     suffixIcon: GestureDetector(
                       onTap: () {
@@ -109,7 +107,7 @@ class _PasswordFormBuilderState extends State<PasswordFormBuilder> {
                       child: Icon(
                         obscureText ? widget.suffix : Ionicons.eye_off_outline,
                         size: 15.0,
-                        color: Theme.of(context).colorScheme.secondary,
+                        color: Color.fromARGB(255, 0, 0, 0),
                       ),
                     ),
                     // fillColor: Colors.white,

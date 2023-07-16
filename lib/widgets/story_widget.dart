@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:social_media_app/models/status.dart';
 import 'package:social_media_app/models/user.dart';
@@ -104,7 +103,7 @@ class StoryWidget extends StatelessWidget {
                   },
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.secondary,
+                      color: Color.fromARGB(255, 0, 0, 0),
                       shape: BoxShape.circle,
                       border: Border.all(
                         color: Colors.transparent,

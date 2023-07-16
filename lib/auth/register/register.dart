@@ -1,10 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:provider/provider.dart';
-import 'package:social_media_app/auth/login/login.dart';
 import 'package:social_media_app/components/password_text_field.dart';
 import 'package:social_media_app/components/text_form_builder.dart';
 import 'package:social_media_app/utils/validation.dart';
@@ -30,7 +28,7 @@ class _RegisterState extends State<Register> {
           children: [
             SizedBox(height: MediaQuery.of(context).size.height / 10),
             Text(
-              'Welcome to Wooble\nCreate a new account and connect with friends',
+              'Create a new account and get your clothes certified',
               style: GoogleFonts.nunitoSans(
                 fontWeight: FontWeight.bold,
                 fontSize: 25.0,
@@ -51,7 +49,7 @@ class _RegisterState extends State<Register> {
                     'Login',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: Theme.of(context).colorScheme.secondary,
+                      color: Color.fromARGB(255, 0, 0, 0),
                     ),
                   ),
                 ),
@@ -140,25 +138,36 @@ class _RegisterState extends State<Register> {
           Container(
             height: 45.0,
             width: 180.0,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(40),
+              border: Border.all(color: Color.fromARGB(255, 226, 226, 226)),
+              gradient: LinearGradient(
+                colors: <Color>[
+                  Color.fromARGB(255, 0, 0, 0),
+                  Color.fromARGB(255, 255, 253, 253)
+                ],
+              ),
+            ),
             child: ElevatedButton(
               style: ButtonStyle(
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                backgroundColor: MaterialStateProperty.all(Colors.transparent),
+                shadowColor: MaterialStateProperty.all(Colors.transparent),
+                shape: MaterialStateProperty.all(
                   RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(40.0),
                   ),
                 ),
-                backgroundColor: MaterialStateProperty.all<Color>(
-                    Theme.of(context).colorScheme.secondary),
-              ),
-              child: Text(
-                'sign up'.toUpperCase(),
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 12.0,
-                  fontWeight: FontWeight.w600,
-                ),
               ),
               onPressed: () => viewModel.register(context),
+              child: Center(
+                child: Text(
+                  'SIGN UP',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w900,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
             ),
           ),
         ],

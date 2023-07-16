@@ -81,7 +81,7 @@ class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin {
         centerTitle: true,
       ),
       body: RefreshIndicator(
-        color: Theme.of(context).colorScheme.secondary,
+        color: Color.fromARGB(255, 0, 0, 0),
         onRefresh: () => getUsers(),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -130,7 +130,7 @@ class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin {
                   child: Icon(
                     Ionicons.close_outline,
                     size: 12.0,
-                    color: Theme.of(context).colorScheme.secondary,
+                    color: Color.fromARGB(255, 0, 0, 0),
                   ),
                 ),
                 // contentPadding: EdgeInsets.only(bottom: 10.0, left: 10.0),
@@ -152,8 +152,10 @@ class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin {
     if (!loading) {
       if (filteredUsers.isEmpty) {
         return Center(
-          child: Text("No User Found",
-              style: TextStyle(fontWeight: FontWeight.bold),),
+          child: Text(
+            "No User Found",
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
         );
       } else {
         return Expanded(
@@ -176,8 +178,7 @@ class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin {
                   leading: user.photoUrl!.isEmpty
                       ? CircleAvatar(
                           radius: 20.0,
-                          backgroundColor:
-                              Theme.of(context).colorScheme.secondary,
+                          backgroundColor: Color.fromARGB(255, 0, 0, 0),
                           child: Center(
                             child: Text(
                               '${user.username![0].toUpperCase()}',
@@ -247,7 +248,7 @@ class _SearchState extends State<Search> with AutomaticKeepAliveClientMixin {
                       height: 30.0,
                       width: 62.0,
                       decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.secondary,
+                        color: Color.fromARGB(255, 0, 0, 0),
                         borderRadius: BorderRadius.circular(3.0),
                       ),
                       child: Center(

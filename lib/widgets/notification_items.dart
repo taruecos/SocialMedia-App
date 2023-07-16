@@ -42,7 +42,7 @@ class _ActivityItemsState extends State<ActivityItems> {
         leading: widget.activity!.userDp!.isEmpty
             ? CircleAvatar(
                 radius: 20.0,
-                backgroundColor: Theme.of(context).colorScheme.secondary,
+                backgroundColor: Color.fromARGB(255, 0, 0, 0),
                 child: Center(
                   child: Text(
                     '${widget.activity!.username![0].toUpperCase()}',
@@ -102,7 +102,7 @@ class _ActivityItemsState extends State<ActivityItems> {
     return Container(
       alignment: Alignment.centerRight,
       padding: EdgeInsets.only(right: 20.0),
-      color: Theme.of(context).colorScheme.secondary,
+      color: Color.fromARGB(255, 0, 0, 0),
       child: Icon(
         CupertinoIcons.delete,
         color: Colors.white,

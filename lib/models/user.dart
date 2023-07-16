@@ -7,8 +7,8 @@ class UserModel {
   String? country;
   String? bio;
   String? id;
-  Timestamp? signedUpAt;
-  Timestamp? lastSeen;
+  DateTime? signedUpAt;
+  DateTime? lastSeen;
   bool? isOnline;
 
   UserModel(
@@ -27,9 +27,13 @@ class UserModel {
     email = json['email'];
     country = json['country'];
     photoUrl = json['photoUrl'];
-    signedUpAt = json['signedUpAt'];
+    signedUpAt = json['signedUpAt'] != null
+        ? (json['signedUpAt'] as Timestamp).toDate()
+        : null;
+    lastSeen = json['lastSeen'] != null
+        ? (json['lastSeen'] as Timestamp).toDate()
+        : null;
     isOnline = json['isOnline'];
-    lastSeen = json['lastSeen'];
     bio = json['bio'];
     id = json['id'];
   }
@@ -41,9 +45,11 @@ class UserModel {
     data['email'] = this.email;
     data['photoUrl'] = this.photoUrl;
     data['bio'] = this.bio;
-    data['signedUpAt'] = this.signedUpAt;
+    data['signedUpAt'] =
+        this.signedUpAt == null ? null : Timestamp.fromDate(this.signedUpAt!);
+    data['lastSeen'] =
+        this.lastSeen == null ? null : Timestamp.fromDate(this.lastSeen!);
     data['isOnline'] = this.isOnline;
-    data['lastSeen'] = this.lastSeen;
     data['id'] = this.id;
     return data;
   }

@@ -34,29 +34,29 @@ class _LoginState extends State<Login> {
               height: 170.0,
               width: MediaQuery.of(context).size.width,
               child: Image.asset(
-                'assets/images/login.png',
+                'assets/images/logo3.png',
               ),
             ),
             SizedBox(height: 10.0),
             Center(
               child: Text(
-                'Welcome back!',
+                'Log in',
                 style: TextStyle(
                   fontSize: 23.0,
                   fontWeight: FontWeight.w900,
                 ),
               ),
             ),
-            Center(
-              child: Text(
-                'Log into your account and get started!',
-                style: TextStyle(
-                  fontSize: 12.0,
-                  fontWeight: FontWeight.w300,
-                  color: Theme.of(context).colorScheme.secondary,
-                ),
-              ),
-            ),
+            // Center(
+            //   child: Text(
+            //     'Log in',
+            //     style: TextStyle(
+            //       fontSize: 12.0,
+            //       fontWeight: FontWeight.w300,
+            //       color: Color.fromARGB(97, 0, 0, 0),
+            //     ),
+            //   ),
+            // ),
             SizedBox(height: 25.0),
             buildForm(context, viewModel),
             SizedBox(height: 10.0),
@@ -77,7 +77,7 @@ class _LoginState extends State<Login> {
                     'Sign Up',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: Theme.of(context).colorScheme.secondary,
+                      color: Color.fromARGB(255, 0, 0, 0),
                     ),
                   ),
                 ),
@@ -148,27 +148,36 @@ class _LoginState extends State<Login> {
           Container(
             height: 45.0,
             width: 180.0,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(40),
+              border: Border.all(color: Color.fromARGB(255, 226, 226, 226)),
+              gradient: LinearGradient(
+                colors: <Color>[
+                  Color.fromARGB(255, 0, 0, 0),
+                  Color.fromARGB(255, 255, 253, 253)
+                ],
+              ),
+            ),
             child: ElevatedButton(
               style: ButtonStyle(
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                backgroundColor: MaterialStateProperty.all(Colors.transparent),
+                shadowColor: MaterialStateProperty.all(Colors.transparent),
+                shape: MaterialStateProperty.all(
                   RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(40.0),
                   ),
                 ),
-                backgroundColor: MaterialStateProperty.all<Color>(
-                  Theme.of(context).colorScheme.secondary,
-                ),
-              ),
-              // highlightElevation: 4.0,
-              child: Text(
-                'Log in'.toUpperCase(),
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 12.0,
-                  fontWeight: FontWeight.w600,
-                ),
               ),
               onPressed: () => viewModel.login(context),
+              child: Center(
+                child: Text(
+                  'LOGIN',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w900,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
             ),
           ),
         ],

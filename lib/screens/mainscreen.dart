@@ -82,11 +82,7 @@ class _TabScreenState extends State<TabScreen> {
                       child: IconButton(
                         icon: Icon(
                           item['icon'],
-                          color: item['index'] != _page
-                              ? Theme.of(context).brightness == Brightness.dark
-                                  ? Colors.white
-                                  : Colors.black
-                              : Theme.of(context).colorScheme.secondary,
+                          color: Color.fromARGB(255, 0, 0, 0),
                           size: 25.0,
                         ),
                         onPressed: () => navigationTapped(item['index']),

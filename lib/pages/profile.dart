@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:social_media_app/auth/login/login.dart';
 import 'package:social_media_app/auth/register/register.dart';
 import 'package:social_media_app/components/stream_grid_wrapper.dart';
 import 'package:social_media_app/models/post.dart';
@@ -13,6 +14,8 @@ import 'package:social_media_app/screens/list_posts.dart';
 import 'package:social_media_app/screens/settings.dart';
 import 'package:social_media_app/utils/firebase.dart';
 import 'package:social_media_app/widgets/post_tiles.dart';
+
+import '../utils/constants.dart';
 
 class Profile extends StatefulWidget {
   final profileId;
@@ -60,7 +63,12 @@ class _ProfileState extends State<Profile> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('WOOBLE'),
+        title: Text(
+          Constants.appName,
+          style: TextStyle(
+            fontWeight: FontWeight.w900,
+          ),
+        ),
         actions: [
           widget.profileId == firebaseAuth.currentUser!.uid
               ? Center(
@@ -71,7 +79,7 @@ class _ProfileState extends State<Profile> {
                         await firebaseAuth.signOut();
                         Navigator.of(context).push(
                           CupertinoPageRoute(
-                            builder: (_) => Register(),
+                            builder: (_) => Login(),
                           ),
                         );
                       },
@@ -101,10 +109,10 @@ class _ProfileState extends State<Profile> {
               background: StreamBuilder(
                 stream: usersRef.doc(widget.profileId).snapshots(),
                 builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-                  if (snapshot.hasData) {
+                  if (snapshot.hasData &&
+                      snapshot.data?.data() is Map<String, dynamic>) {
                     UserModel user = UserModel.fromJson(
-                      snapshot.data!.data() as Map<String, dynamic>,
-                    );
+                        snapshot.data!.data() as Map<String, dynamic>);
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -116,9 +124,8 @@ class _ProfileState extends State<Profile> {
                               child: user.photoUrl!.isEmpty
                                   ? CircleAvatar(
                                       radius: 40.0,
-                                      backgroundColor: Theme.of(context)
-                                          .colorScheme
-                                          .secondary,
+                                      backgroundColor:
+                                          Color.fromARGB(255, 0, 0, 0),
                                       child: Center(
                                         child: Text(
                                           '${user.username![0].toUpperCase()}',
@@ -205,9 +212,8 @@ class _ProfileState extends State<Profile> {
                                               children: [
                                                 Icon(
                                                   Ionicons.settings_outline,
-                                                  color: Theme.of(context)
-                                                      .colorScheme
-                                                      .secondary,
+                                                  color: Color.fromARGB(
+                                                      255, 0, 0, 0),
                                                 ),
                                                 Text(
                                                   'settings',
@@ -299,7 +305,7 @@ class _ProfileState extends State<Profile> {
                                   padding: const EdgeInsets.only(bottom: 15.0),
                                   child: Container(
                                     height: 50.0,
-                                    width: 0.3,
+                                    width: 0.2,
                                     color: Colors.grey,
                                   ),
                                 ),
@@ -325,6 +331,7 @@ class _ProfileState extends State<Profile> {
                             ),
                           ),
                         ),
+                        SizedBox(height: 10.0),
                         buildProfileButton(user),
                       ],
                     );
@@ -408,6 +415,7 @@ class _ProfileState extends State<Profile> {
 
   buildProfileButton(user) {
     //if isMe then display "edit profile"
+
     bool isMe = widget.profileId == firebaseAuth.currentUser!.uid;
     if (isMe) {
       return buildButton(
@@ -445,12 +453,13 @@ class _ProfileState extends State<Profile> {
           width: 200.0,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5.0),
+            border: Border.all(color: Color.fromARGB(255, 226, 226, 226)),
             gradient: LinearGradient(
               begin: Alignment.topRight,
               end: Alignment.bottomLeft,
               colors: [
-                Theme.of(context).colorScheme.secondary,
-                Color(0xff597FDB),
+                Color.fromARGB(255, 255, 255, 255),
+                Color.fromARGB(255, 0, 0, 0)
               ],
             ),
           ),

@@ -57,7 +57,7 @@ class _SettingState extends State<Setting> {
                     notifier.toggleTheme();
                   },
                   value: notifier.dark,
-                  activeColor: Theme.of(context).colorScheme.secondary,
+                  activeColor: Color.fromARGB(255, 0, 0, 0),
                 ),
               ),
             ),

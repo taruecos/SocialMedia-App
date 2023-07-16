@@ -1,9 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_chat_bubble/bubble_type.dart';
 import 'package:flutter_chat_bubble/chat_bubble.dart';
-import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_3.dart';
 import 'package:social_media_app/components/text_time.dart';
 import 'package:social_media_app/models/enum/message_type.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -50,17 +48,6 @@ class _ChatBubbleWidgetState extends State<ChatBubbleWidget> {
   Widget build(BuildContext context) {
     final align =
         widget.isMe! ? CrossAxisAlignment.end : CrossAxisAlignment.start;
-    final radius = widget.isMe!
-        ? BorderRadius.only(
-            topLeft: Radius.circular(5.0),
-            bottomLeft: Radius.circular(5.0),
-            bottomRight: Radius.circular(10.0),
-          )
-        : BorderRadius.only(
-            topRight: Radius.circular(5.0),
-            bottomLeft: Radius.circular(10.0),
-            bottomRight: Radius.circular(5.0),
-          );
     return Column(
       crossAxisAlignment: align,
       children: <Widget>[

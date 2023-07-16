@@ -15,7 +15,7 @@ class Feeds extends StatefulWidget {
   _FeedsState createState() => _FeedsState();
 }
 
-class _FeedsState extends State<Feeds> with AutomaticKeepAliveClientMixin{
+class _FeedsState extends State<Feeds> with AutomaticKeepAliveClientMixin {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   int page = 5;
@@ -36,6 +36,7 @@ class _FeedsState extends State<Feeds> with AutomaticKeepAliveClientMixin{
     super.initState();
   }
 
+  // ignore: must_call_super
   @override
   Widget build(BuildContext context) {
     print('>>>');
@@ -69,7 +70,7 @@ class _FeedsState extends State<Feeds> with AutomaticKeepAliveClientMixin{
         ],
       ),
       body: RefreshIndicator(
-        color: Theme.of(context).colorScheme.secondary,
+        color: Color.fromARGB(255, 0, 0, 0),
         onRefresh: () =>
             postRef.orderBy('timestamp', descending: true).limit(page).get(),
         child: SingleChildScrollView(

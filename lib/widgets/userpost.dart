@@ -331,8 +331,7 @@ class UserPost extends StatelessWidget {
                         user.photoUrl!.isEmpty
                             ? CircleAvatar(
                                 radius: 20.0,
-                                backgroundColor:
-                                    Theme.of(context).colorScheme.secondary,
+                                backgroundColor: Color.fromARGB(255, 0, 0, 0),
                                 child: Center(
                                   child: Text(
                                     '${user.username![0].toUpperCase()}',

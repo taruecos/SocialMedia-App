@@ -20,7 +20,12 @@ class _ActivitiesState extends State<Activities> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text('Notifications'),
+        title: Text(
+          'Notifications',
+          style: TextStyle(
+            fontWeight: FontWeight.w900,
+          ),
+        ),
         centerTitle: true,
         actions: [
           Padding(
@@ -32,7 +37,7 @@ class _ActivitiesState extends State<Activities> {
                 style: TextStyle(
                   fontSize: 13.0,
                   fontWeight: FontWeight.w900,
-                  color: Theme.of(context).colorScheme.secondary,
+                  color: Color.fromARGB(255, 0, 0, 0),
                 ),
               ),
             ),

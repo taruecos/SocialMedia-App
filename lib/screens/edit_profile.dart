@@ -48,7 +48,7 @@ class _EditProfileState extends State<EditProfile> {
                     style: TextStyle(
                       fontWeight: FontWeight.w900,
                       fontSize: 15.0,
-                      color: Theme.of(context).colorScheme.secondary,
+                      color: Color.fromARGB(255, 0, 0, 0),
                     ),
                   ),
                 ),

@@ -22,21 +22,13 @@ class _LandingState extends State<Landing> {
               child: Padding(
                 padding: const EdgeInsets.only(left: 10.0),
                 child: Image.asset(
-                  'assets/images/new1.png',
+                  'assets/images/logo2.png',
                   height: 200.0,
-                  width: 200.0,
+                  width: 300.0,
                   fit: BoxFit.cover,
                 ),
               ),
             ),
-            Text(
-              'WOOBLE',
-              style: TextStyle(
-                fontSize: 22.0,
-                fontWeight: FontWeight.w900,
-                fontFamily: 'Ubuntu-Regular',
-              ),
-            )
           ],
         ),
       ),
@@ -60,13 +52,15 @@ class _LandingState extends State<Landing> {
                   width: 130.0,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(40.0),
-                    border: Border.all(color: Colors.grey),
+                    border:
+                        Border.all(color: Color.fromARGB(255, 201, 201, 201)),
                     gradient: LinearGradient(
                       begin: Alignment.topRight,
                       end: Alignment.bottomLeft,
                       colors: [
-                        Theme.of(context).colorScheme.secondary,
-                        Color(0xff597FDB),
+                        // Theme.of(context).colorScheme.secondary,
+                        Color.fromARGB(255, 255, 253, 253),
+                        Color.fromARGB(255, 0, 0, 0),
                       ],
                     ),
                   ),
@@ -94,13 +88,15 @@ class _LandingState extends State<Landing> {
                   width: 130.0,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(40.0),
-                    border: Border.all(color: Colors.white),
+                    border:
+                        Border.all(color: Color.fromARGB(255, 201, 201, 201)),
                     gradient: LinearGradient(
                       begin: Alignment.topRight,
                       end: Alignment.bottomLeft,
                       colors: [
-                        Theme.of(context).colorScheme.secondary,
-                        Color(0xff597FDB),
+                        // Theme.of(context).colorScheme.secondary,
+                        Color.fromARGB(255, 255, 255, 255),
+                        Color.fromARGB(255, 0, 0, 0),
                       ],
                     ),
                   ),
@@ -109,7 +105,7 @@ class _LandingState extends State<Landing> {
                       'SIGN UP',
                       style: TextStyle(
                         fontWeight: FontWeight.w900,
-                        color: Colors.white,
+                        color: Color.fromARGB(255, 255, 255, 255),
                       ),
                     ),
                   ),
