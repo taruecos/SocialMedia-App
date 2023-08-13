@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -14,7 +16,11 @@ import 'package:social_media_app/utils/constants.dart';
 class StatusViewModel extends ChangeNotifier {
   //Services
   UserService userService = UserService();
-  PostService postService = PostService();
+  PostService postService = PostService(
+    firebaseAuth: FirebaseAuth.instance,
+    usersRef: FirebaseFirestore.instance.collection('users'),
+    postRef: FirebaseFirestore.instance.collection('posts'),
+  );
   StatusService statusService = StatusService();
 
   //Keys

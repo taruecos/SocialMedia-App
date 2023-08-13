@@ -26,7 +26,7 @@ class _TabScreenState extends State<TabScreen> {
     },
     {
       'title': 'Search',
-      'icon': Ionicons.search,
+      'icon': CupertinoIcons.search_circle_fill,
       'page': Search(),
       'index': 1,
     },
@@ -37,14 +37,14 @@ class _TabScreenState extends State<TabScreen> {
       'index': 2,
     },
     {
-      'title': 'Notification',
-      'icon': CupertinoIcons.bell_solid,
+      'title': 'Favorites',
+      'icon': CupertinoIcons.flame_fill,
       'page': Activities(),
       'index': 3,
     },
     {
       'title': 'Profile',
-      'icon': CupertinoIcons.person_fill,
+      'icon': Ionicons.person,
       'page': Profile(profileId: firebaseAuth.currentUser!.uid),
       'index': 4,
     },
@@ -83,7 +83,7 @@ class _TabScreenState extends State<TabScreen> {
                         icon: Icon(
                           item['icon'],
                           color: Color.fromARGB(255, 0, 0, 0),
-                          size: 25.0,
+                          size: 30.0,
                         ),
                         onPressed: () => navigationTapped(item['index']),
                       ),

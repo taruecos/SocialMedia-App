@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
@@ -14,15 +16,16 @@ import 'package:social_media_app/utils/constants.dart';
 import 'package:social_media_app/utils/firebase.dart';
 
 class PostsViewModel extends ChangeNotifier {
-  //Services
   UserService userService = UserService();
-  PostService postService = PostService();
+  PostService postService = PostService(
+    firebaseAuth: FirebaseAuth.instance,
+    usersRef: FirebaseFirestore.instance.collection('users'),
+    postRef: FirebaseFirestore.instance.collection('posts'),
+  );
 
-  //Keys
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  //Variables
   bool loading = false;
   String? username;
   File? mediaUrl;
@@ -33,7 +36,6 @@ class PostsViewModel extends ChangeNotifier {
   String? bio;
   String? description;
   String? email;
-  String? commentData;
   String? ownerId;
   String? userId;
   String? type;
@@ -42,16 +44,16 @@ class PostsViewModel extends ChangeNotifier {
   bool edit = false;
   String? id;
 
-  //controllers
   TextEditingController locationTEC = TextEditingController();
+  TextEditingController descriptionText = TextEditingController();
 
-  //Setters
   setEdit(bool val) {
     edit = val;
     notifyListeners();
   }
 
   setPost(PostModel post) {
+    // ignore: unnecessary_null_comparison
     if (post != null) {
       description = post.description;
       imgLink = post.mediaUrl;
@@ -66,7 +68,6 @@ class PostsViewModel extends ChangeNotifier {
   }
 
   setUsername(String val) {
-    print('SetName $val');
     username = val;
     notifyListeners();
   }
@@ -74,22 +75,26 @@ class PostsViewModel extends ChangeNotifier {
   setDescription(String val) {
     print('SetDescription $val');
     description = val;
+    descriptionText.text = description!;
     notifyListeners();
   }
 
   setLocation(String val) {
-    print('SetCountry $val');
     location = val;
     notifyListeners();
   }
 
   setBio(String val) {
-    print('SetBio $val');
     bio = val;
     notifyListeners();
   }
 
-  //Functions
+  setImgLink(String? val) {
+    print('SetImgLink $val');
+    imgLink = val;
+    notifyListeners();
+  }
+
   pickImage({bool camera = false, BuildContext? context}) async {
     loading = true;
     notifyListeners();
@@ -120,6 +125,7 @@ class PostsViewModel extends ChangeNotifier {
         ],
       );
       mediaUrl = File(croppedFile!.path);
+      setImgLink(croppedFile.path); // Call setImgLink to update imgLink
       loading = false;
       notifyListeners();
     } catch (e) {
@@ -132,28 +138,46 @@ class PostsViewModel extends ChangeNotifier {
   getLocation() async {
     loading = true;
     notifyListeners();
+
     LocationPermission permission = await Geolocator.checkPermission();
-    print(permission);
     if (permission == LocationPermission.denied ||
         permission == LocationPermission.deniedForever) {
       LocationPermission rPermission = await Geolocator.requestPermission();
-      print(rPermission);
       await getLocation();
-    } else {
-      position = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high);
-      List<Placemark> placemarks = await placemarkFromCoordinates(
-          position!.latitude, position!.longitude);
-      placemark = placemarks[0];
-      location = " ${placemarks[0].locality}, ${placemarks[0].country}";
-      locationTEC.text = location!;
-      print(location);
+      return;
     }
+
+    position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    if (position == null) {
+      loading = false;
+      notifyListeners();
+      return;
+    }
+
+    List<Placemark> placemarks =
+        await placemarkFromCoordinates(position!.latitude, position!.longitude);
+    if (placemarks.isEmpty) {
+      loading = false;
+      notifyListeners();
+      return;
+    }
+
+    placemark = placemarks[0];
+    location = "${placemark?.locality}, ${placemark?.country}";
+    locationTEC.text = location!;
+
     loading = false;
     notifyListeners();
   }
 
   uploadPosts(BuildContext context) async {
+    // Check for null values before proceeding.
+    if (mediaUrl == null || location == null || description == null) {
+      showInSnackBar('Required values missing!', context);
+      return;
+    }
+
     try {
       loading = true;
       notifyListeners();
@@ -173,22 +197,28 @@ class PostsViewModel extends ChangeNotifier {
   uploadProfilePicture(BuildContext context) async {
     if (mediaUrl == null) {
       showInSnackBar('Please select an image', context);
-    } else {
-      try {
-        loading = true;
-        notifyListeners();
-        await postService.uploadProfilePicture(
-            mediaUrl!, firebaseAuth.currentUser!);
-        loading = false;
-        Navigator.of(context)
-            .pushReplacement(CupertinoPageRoute(builder: (_) => TabScreen()));
-        notifyListeners();
-      } catch (e) {
-        print(e);
-        loading = false;
-        showInSnackBar('Uploaded successfully!', context);
-        notifyListeners();
-      }
+      return;
+    }
+
+    final user = firebaseAuth.currentUser;
+    if (user == null) {
+      showInSnackBar('User not available!', context);
+      return;
+    }
+
+    try {
+      loading = true;
+      notifyListeners();
+      await postService.uploadProfilePicture(mediaUrl!, user);
+      loading = false;
+      Navigator.of(context)
+          .pushReplacement(CupertinoPageRoute(builder: (_) => TabScreen()));
+      notifyListeners();
+    } catch (e) {
+      print(e);
+      loading = false;
+      showInSnackBar('Uploaded successfully!', context);
+      notifyListeners();
     }
   }
 

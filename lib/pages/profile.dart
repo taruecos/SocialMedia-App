@@ -5,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:social_media_app/auth/login/login.dart';
-import 'package:social_media_app/auth/register/register.dart';
 import 'package:social_media_app/components/stream_grid_wrapper.dart';
 import 'package:social_media_app/models/post.dart';
 import 'package:social_media_app/models/user.dart';
@@ -30,9 +29,6 @@ class _ProfileState extends State<Profile> {
   User? user;
   bool isLoading = false;
   int postCount = 0;
-  int followersCount = 0;
-  int followingCount = 0;
-  bool isFollowing = false;
   UserModel? users;
   final DateTime timestamp = DateTime.now();
   ScrollController controller = ScrollController();
@@ -44,18 +40,6 @@ class _ProfileState extends State<Profile> {
   @override
   void initState() {
     super.initState();
-    checkIfFollowing();
-  }
-
-  checkIfFollowing() async {
-    DocumentSnapshot doc = await followersRef
-        .doc(widget.profileId)
-        .collection('userFollowers')
-        .doc(currentUserId())
-        .get();
-    setState(() {
-      isFollowing = doc.exists;
-    });
   }
 
   @override
@@ -73,7 +57,28 @@ class _ProfileState extends State<Profile> {
           widget.profileId == firebaseAuth.currentUser!.uid
               ? Center(
                   child: Padding(
-                    padding: const EdgeInsets.only(right: 25.0),
+                    padding: const EdgeInsets.only(left: 15.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          CupertinoPageRoute(
+                            builder: (_) => Setting(),
+                          ),
+                        );
+                      },
+                      child: Icon(
+                        Ionicons.settings,
+                        color: Color.fromARGB(255, 0, 0, 0),
+                      ),
+                    ),
+                  ),
+                )
+              : SizedBox(),
+          SizedBox(width: 15),
+          widget.profileId == firebaseAuth.currentUser!.uid
+              ? Center(
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 15.0),
                     child: GestureDetector(
                       onTap: () async {
                         await firebaseAuth.signOut();
@@ -83,17 +88,14 @@ class _ProfileState extends State<Profile> {
                           ),
                         );
                       },
-                      child: Text(
-                        'Log Out',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w900,
-                          fontSize: 15.0,
-                        ),
+                      child: Icon(
+                        Ionicons.log_out,
+                        color: Color.fromARGB(255, 0, 0, 0),
                       ),
                     ),
                   ),
                 )
-              : SizedBox()
+              : SizedBox(),
         ],
       ),
       body: CustomScrollView(
@@ -104,7 +106,7 @@ class _ProfileState extends State<Profile> {
             floating: false,
             toolbarHeight: 5.0,
             collapsedHeight: 6.0,
-            expandedHeight: 225.0,
+            expandedHeight: 200.0,
             flexibleSpace: FlexibleSpaceBar(
               background: StreamBuilder(
                 stream: usersRef.doc(widget.profileId).snapshots(),
@@ -114,23 +116,24 @@ class _ProfileState extends State<Profile> {
                     UserModel user = UserModel.fromJson(
                         snapshot.data!.data() as Map<String, dynamic>);
                     return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Padding(
-                              padding: const EdgeInsets.only(left: 20.0),
+                              padding: const EdgeInsets.only(left: 40.0),
                               child: user.photoUrl!.isEmpty
                                   ? CircleAvatar(
-                                      radius: 40.0,
+                                      radius: 30.0,
                                       backgroundColor:
-                                          Color.fromARGB(255, 0, 0, 0),
+                                          Color.fromARGB(255, 202, 196, 163),
                                       child: Center(
                                         child: Text(
                                           '${user.username![0].toUpperCase()}',
                                           style: TextStyle(
-                                            color: Colors.white,
+                                            color: const Color.fromARGB(
+                                                255, 0, 0, 0),
                                             fontSize: 15.0,
                                             fontWeight: FontWeight.w900,
                                           ),
@@ -145,9 +148,9 @@ class _ProfileState extends State<Profile> {
                                       ),
                                     ),
                             ),
-                            SizedBox(width: 20.0),
+                            SizedBox(width: 10.0),
                             Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 SizedBox(height: 32.0),
                                 Row(
@@ -158,10 +161,11 @@ class _ProfileState extends State<Profile> {
                                     ),
                                     Column(
                                       crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                          CrossAxisAlignment.center,
                                       children: [
                                         Container(
-                                          width: 130.0,
+                                          width: 150.0,
+                                          alignment: Alignment.center,
                                           child: Text(
                                             user.username!,
                                             style: TextStyle(
@@ -171,60 +175,18 @@ class _ProfileState extends State<Profile> {
                                             maxLines: null,
                                           ),
                                         ),
-                                        Container(
-                                          width: 130.0,
-                                          child: Text(
-                                            user.country!,
-                                            style: TextStyle(
-                                              fontSize: 12.0,
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
+                                        SizedBox(height: 3.0),
+                                        Text(
+                                          user.email!,
+                                          style: TextStyle(
+                                            fontSize: 10.0,
                                           ),
-                                        ),
-                                        SizedBox(width: 10.0),
-                                        Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              user.email!,
-                                              style: TextStyle(
-                                                fontSize: 10.0,
-                                              ),
-                                            ),
-                                          ],
                                         ),
                                       ],
                                     ),
-                                    widget.profileId == currentUserId()
-                                        ? InkWell(
-                                            onTap: () {
-                                              Navigator.of(context).push(
-                                                CupertinoPageRoute(
-                                                  builder: (_) => Setting(),
-                                                ),
-                                              );
-                                            },
-                                            child: Column(
-                                              children: [
-                                                Icon(
-                                                  Ionicons.settings_outline,
-                                                  color: Color.fromARGB(
-                                                      255, 0, 0, 0),
-                                                ),
-                                                Text(
-                                                  'settings',
-                                                  style: TextStyle(
-                                                    fontSize: 11.5,
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          )
-                                        : const Text('')
+                                    buildProfileButton(user),
+
+                                    //edit profile set
                                     // : buildLikeButton()
                                   ],
                                 ),
@@ -232,107 +194,47 @@ class _ProfileState extends State<Profile> {
                             ),
                           ],
                         ),
-                        Padding(
+                        Container(
                           padding: const EdgeInsets.only(top: 10.0, left: 20.0),
-                          child: user.bio!.isEmpty
-                              ? Container()
-                              : Container(
-                                  width: 200,
-                                  child: Text(
-                                    user.bio!,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              user.bio!.isEmpty
+                                  ? Container()
+                                  : Container(
+                                      width: 200,
+                                      child: Text(
+                                        user.bio!,
+                                        style: TextStyle(
+                                          fontSize: 12.0,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                        maxLines: null,
+                                      ),
+                                    ),
+                              Row(
+                                children: [
+                                  Text(
+                                    user.country!,
                                     style: TextStyle(
-                                      fontSize: 10.0,
+                                      fontSize: 8.0,
                                       fontWeight: FontWeight.w600,
                                     ),
-                                    maxLines: null,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
-                                ),
-                        ),
-                        SizedBox(height: 10.0),
-                        Container(
-                          height: 50.0,
-                          child: Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 30.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                StreamBuilder(
-                                  stream: postRef
-                                      .where('ownerId',
-                                          isEqualTo: widget.profileId)
-                                      .snapshots(),
-                                  builder: (context,
-                                      AsyncSnapshot<QuerySnapshot> snapshot) {
-                                    if (snapshot.hasData) {
-                                      QuerySnapshot<Object?>? snap =
-                                          snapshot.data;
-                                      List<DocumentSnapshot> docs = snap!.docs;
-                                      return buildCount(
-                                          "POSTS", docs.length ?? 0);
-                                    } else {
-                                      return buildCount("POSTS", 0);
-                                    }
-                                  },
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(bottom: 15.0),
-                                  child: Container(
-                                    height: 50.0,
-                                    width: 0.3,
-                                    color: Colors.grey,
+                                  SizedBox(width: 1.0),
+                                  Icon(
+                                    Ionicons.location,
+                                    color:
+                                        const Color.fromARGB(255, 255, 59, 59),
+                                    size: 10,
                                   ),
-                                ),
-                                StreamBuilder(
-                                  stream: followersRef
-                                      .doc(widget.profileId)
-                                      .collection('userFollowers')
-                                      .snapshots(),
-                                  builder: (context,
-                                      AsyncSnapshot<QuerySnapshot> snapshot) {
-                                    if (snapshot.hasData) {
-                                      QuerySnapshot<Object?>? snap =
-                                          snapshot.data;
-                                      List<DocumentSnapshot> docs = snap!.docs;
-                                      return buildCount(
-                                          "FOLLOWERS", docs.length ?? 0);
-                                    } else {
-                                      return buildCount("FOLLOWERS", 0);
-                                    }
-                                  },
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(bottom: 15.0),
-                                  child: Container(
-                                    height: 50.0,
-                                    width: 0.2,
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                                StreamBuilder(
-                                  stream: followingRef
-                                      .doc(widget.profileId)
-                                      .collection('userFollowing')
-                                      .snapshots(),
-                                  builder: (context,
-                                      AsyncSnapshot<QuerySnapshot> snapshot) {
-                                    if (snapshot.hasData) {
-                                      QuerySnapshot<Object?>? snap =
-                                          snapshot.data;
-                                      List<DocumentSnapshot> docs = snap!.docs;
-                                      return buildCount(
-                                          "FOLLOWING", docs.length ?? 0);
-                                    } else {
-                                      return buildCount("FOLLOWING", 0);
-                                    }
-                                  },
-                                ),
-                              ],
-                            ),
+                                ],
+                              ),
+                            ],
                           ),
                         ),
-                        SizedBox(height: 10.0),
-                        buildProfileButton(user),
                       ],
                     );
                   }
@@ -352,8 +254,13 @@ class _ProfileState extends State<Profile> {
                       child: Row(
                         children: [
                           Text(
-                            'All Posts',
+                            'Garde-robe  ',
                             style: TextStyle(fontWeight: FontWeight.w900),
+                          ),
+                          Icon(
+                            Ionicons.shirt,
+                            color: Color.fromARGB(255, 0, 0, 0),
+                            size: 15,
                           ),
                           const Spacer(),
                           IconButton(
@@ -418,7 +325,7 @@ class _ProfileState extends State<Profile> {
 
     bool isMe = widget.profileId == firebaseAuth.currentUser!.uid;
     if (isMe) {
-      return buildButton(
+      return buildEditButton(
           text: "Edit Profile",
           function: () {
             Navigator.of(context).push(
@@ -429,123 +336,19 @@ class _ProfileState extends State<Profile> {
               ),
             );
           });
-      //if you are already following the user then "unfollow"
-    } else if (isFollowing) {
-      return buildButton(
-        text: "Unfollow",
-        function: handleUnfollow,
-      );
-      //if you are not following the user then "follow"
-    } else if (!isFollowing) {
-      return buildButton(
-        text: "Follow",
-        function: handleFollow,
-      );
     }
   }
 
-  buildButton({String? text, Function()? function}) {
+  buildEditButton({String? text, Function()? function}) {
     return Center(
-      child: GestureDetector(
-        onTap: function!,
-        child: Container(
-          height: 40.0,
-          width: 200.0,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5.0),
-            border: Border.all(color: Color.fromARGB(255, 226, 226, 226)),
-            gradient: LinearGradient(
-              begin: Alignment.topRight,
-              end: Alignment.bottomLeft,
-              colors: [
-                Color.fromARGB(255, 255, 255, 255),
-                Color.fromARGB(255, 0, 0, 0)
-              ],
-            ),
-          ),
-          child: Center(
-            child: Text(
-              text!,
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
+      child: Padding(
+        padding: const EdgeInsets.only(left: 15.0),
+        child: Icon(
+          Ionicons.create,
+          color: Color.fromARGB(255, 0, 0, 0),
         ),
       ),
     );
-  }
-
-  handleUnfollow() async {
-    DocumentSnapshot doc = await usersRef.doc(currentUserId()).get();
-    users = UserModel.fromJson(doc.data() as Map<String, dynamic>);
-    setState(() {
-      isFollowing = false;
-    });
-    //remove follower
-    followersRef
-        .doc(widget.profileId)
-        .collection('userFollowers')
-        .doc(currentUserId())
-        .get()
-        .then((doc) {
-      if (doc.exists) {
-        doc.reference.delete();
-      }
-    });
-    //remove following
-    followingRef
-        .doc(currentUserId())
-        .collection('userFollowing')
-        .doc(widget.profileId)
-        .get()
-        .then((doc) {
-      if (doc.exists) {
-        doc.reference.delete();
-      }
-    });
-    //remove from notifications feeds
-    notificationRef
-        .doc(widget.profileId)
-        .collection('notifications')
-        .doc(currentUserId())
-        .get()
-        .then((doc) {
-      if (doc.exists) {
-        doc.reference.delete();
-      }
-    });
-  }
-
-  handleFollow() async {
-    DocumentSnapshot doc = await usersRef.doc(currentUserId()).get();
-    users = UserModel.fromJson(doc.data() as Map<String, dynamic>);
-    setState(() {
-      isFollowing = true;
-    });
-    //updates the followers collection of the followed user
-    followersRef
-        .doc(widget.profileId)
-        .collection('userFollowers')
-        .doc(currentUserId())
-        .set({});
-    //updates the following collection of the currentUser
-    followingRef
-        .doc(currentUserId())
-        .collection('userFollowing')
-        .doc(widget.profileId)
-        .set({});
-    //update the notification feeds
-    notificationRef
-        .doc(widget.profileId)
-        .collection('notifications')
-        .doc(currentUserId())
-        .set({
-      "type": "follow",
-      "ownerId": widget.profileId,
-      "username": users?.username,
-      "userId": users?.id,
-      "userDp": users?.photoUrl,
-      "timestamp": timestamp,
-    });
   }
 
   buildPostView() {

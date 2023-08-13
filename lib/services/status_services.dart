@@ -10,6 +10,8 @@ import 'package:social_media_app/utils/firebase.dart';
 import 'package:uuid/uuid.dart';
 
 class StatusService {
+  User? user = firebaseAuth.currentUser;
+
   String statusId = const Uuid().v1();
   UserService userService = UserService();
 
@@ -27,7 +29,7 @@ class StatusService {
         .set(status.toJson());
     //will update "lastTextTime" to the last time a text was sent
     await statusRef.doc("$chatId").update({
-      "userId": firebaseAuth.currentUser!.uid,
+      "userId": user!.uid,
     });
   }
 
@@ -38,7 +40,6 @@ class StatusService {
         ids.add(documentSnapshot.get('id'));
       });
     });
-    User? user = firebaseAuth.currentUser;
     DocumentReference ref = await statusRef.add({
       'whoCanSee': ids,
     });
