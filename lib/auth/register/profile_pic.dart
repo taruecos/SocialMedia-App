@@ -47,24 +47,25 @@ class _ProfilePictureState extends State<ProfilePicture> {
                       color: Theme.of(context).colorScheme.secondary,
                     ),
                   ),
-                  child: viewModel.imgLink != null
+                  child: viewModel.profilePicture != null
                       ? CustomImage(
-                          imageUrl: viewModel.imgLink,
+                          imageUrl: viewModel.profilePicture,
                           width: MediaQuery.of(context).size.width,
                           height: MediaQuery.of(context).size.width - 30,
                           fit: BoxFit.cover,
                         )
-                      : viewModel.mediaUrl == null
+                      : viewModel.userDp == null
                           ? Center(
                               child: Text(
                                 'Tap to add your profile picture',
                                 style: TextStyle(
-                                  color: Theme.of(context).colorScheme.secondary,
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
                                 ),
                               ),
                             )
                           : Image.file(
-                              viewModel.mediaUrl!,
+                              viewModel.userDp!,
                               width: MediaQuery.of(context).size.width,
                               height: MediaQuery.of(context).size.width - 30,
                               fit: BoxFit.cover,

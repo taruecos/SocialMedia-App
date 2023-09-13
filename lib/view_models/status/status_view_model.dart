@@ -1,7 +1,6 @@
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -15,14 +14,9 @@ import 'package:social_media_app/utils/constants.dart';
 
 class StatusViewModel extends ChangeNotifier {
   //Services
-  UserService userService = UserService();
-  PostService postService = PostService(
-    firebaseAuth: FirebaseAuth.instance,
-    usersRef: FirebaseFirestore.instance.collection('users'),
-    postRef: FirebaseFirestore.instance.collection('posts'),
-  );
-  StatusService statusService = StatusService();
-
+  late final UserService userService;
+  late final PostService postService;
+  late final StatusService statusService;
   //Keys
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -49,23 +43,56 @@ class StatusViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void handleCapturedImage(String filePath, BuildContext context) {
+    mediaUrl = File(filePath);
+    loading = false;
+    Navigator.of(context).push(
+      CupertinoPageRoute(
+        builder: (_) => ConfirmStatus(),
+      ),
+    );
+    notifyListeners();
+  }
+
   //Functions
   //Functions
-  pickImage({bool camera = false, BuildContext? context}) async {
+  Future<void> pickImage({
+    CameraController? cameraController,
+    bool camera = false,
+    BuildContext? context,
+  }) async {
     loading = true;
     notifyListeners();
+
     try {
-      PickedFile? pickedFile = await picker.getImage(
-        source: camera ? ImageSource.camera : ImageSource.gallery,
-      );
+      print("Pick Image called with camera as $camera");
+      if (camera && cameraController != null) {
+        final XFile file = await cameraController.takePicture();
+        processImage(file.path, context);
+      } else {
+        PickedFile? pickedFile =
+            await picker.getImage(source: ImageSource.gallery);
+        if (pickedFile != null) {
+          processImage(pickedFile.path, context);
+        }
+      }
+    } catch (e) {
+      loading = false;
+      notifyListeners();
+      showInSnackBar('Cancelled', context);
+    }
+  }
+
+  Future<void> processImage(String path, BuildContext? context) async {
+    try {
       CroppedFile? croppedFile = await ImageCropper().cropImage(
-        sourcePath: pickedFile!.path,
+        sourcePath: path,
         aspectRatioPresets: [
           CropAspectRatioPreset.square,
           CropAspectRatioPreset.ratio3x2,
           CropAspectRatioPreset.original,
           CropAspectRatioPreset.ratio4x3,
-          CropAspectRatioPreset.ratio16x9
+          CropAspectRatioPreset.ratio16x9,
         ],
         uiSettings: [
           AndroidUiSettings(
@@ -80,18 +107,20 @@ class StatusViewModel extends ChangeNotifier {
           ),
         ],
       );
-      mediaUrl = File(croppedFile!.path);
-      loading = false;
-      Navigator.of(context!).push(
-        CupertinoPageRoute(
-          builder: (_) => ConfirmStatus(),
-        ),
-      );
-      notifyListeners();
+      if (croppedFile != null) {
+        mediaUrl = File(croppedFile.path);
+        loading = false;
+        Navigator.of(context!).push(
+          CupertinoPageRoute(
+            builder: (_) => ConfirmStatus(),
+          ),
+        );
+        notifyListeners();
+      }
     } catch (e) {
       loading = false;
       notifyListeners();
-      showInSnackBar('Cancelled', context);
+      showInSnackBar('Error processing image', context);
     }
   }
 

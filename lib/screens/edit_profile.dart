@@ -134,39 +134,6 @@ class _EditProfileState extends State<EditProfile> {
               },
             ),
             SizedBox(height: 10.0),
-            TextFormBuilder(
-              initialValue: widget.user!.country,
-              enabled: !viewModel.loading,
-              prefix: Ionicons.pin_outline,
-              hintText: "Country",
-              textInputAction: TextInputAction.next,
-              validateFunction: Validations.validateName,
-              onSaved: (String val) {
-                viewModel.setCountry(val);
-              },
-            ),
-            SizedBox(height: 10.0),
-            Text(
-              "Bio",
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            TextFormField(
-              maxLines: null,
-              initialValue: widget.user!.bio,
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              validator: (String? value) {
-                if (value!.length > 1000) {
-                  return 'Bio must be short';
-                }
-                return null;
-              },
-              onSaved: (String? val) {
-                viewModel.setBio(val!);
-              },
-              onChanged: (String val) {
-                viewModel.setBio(val);
-              },
-            ),
           ],
         ),
       ),

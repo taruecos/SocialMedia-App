@@ -34,7 +34,7 @@ class _PostTileState extends State<PostTile> {
             borderRadius: BorderRadius.all(
               Radius.circular(3.0),
             ),
-            child: cachedNetworkImage(widget.post!.mediaUrl!),
+            child: cachedNetworkImage(widget.post!.itemImage!),
           ),
         ),
       ),
